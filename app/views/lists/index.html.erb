@@ -1,0 +1,68 @@
+
+<h1 class="header-title"><%= @category.name %></h1> 
+  
+  <button class="btn btn-success" type="button">
+    <%= link_to 'New Task List', new_category_list_path(@category) %>
+  </button>
+
+  <button class="btn btn-dark" type="button">
+    <%= link_to 'Go Back', categories_path %>
+  </button>
+  
+<table class="table table-bordered">
+
+  <thead class="table-dark">
+        <tr>
+          <th>Category ID</th>
+          <th>Task Description</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Option</th>
+        </tr>
+  </thead>
+
+  <tbody>
+    <% @lists.each do |list| %>
+
+    <% if list.completed %>
+      
+      <tr class="table-secondary">
+      
+      </tr>
+        <td><%= list.category_id %></td>
+        <td class="striker"><%= link_to list.description, edit_category_list_path(@category, list) %></td>
+        <td><%= Date.today %></td>
+        <td>
+          <center> 
+              <%= form_with(model:[@category, list]) do |f| %>
+                <%= f.text_field :description, type: 'hidden' %>
+                <%= f.check_box :completed, :checked => false, :style => 'visibilit: hidden' %>
+                <%= f.submit "Not been Completed", class: 'btn btn-outline-secondary btn-sm' %>
+            <% end %> 
+          </center>
+        </td>
+        
+        <td><%= link_to 'Remove', list, class: 'btn btn-ouline-danger btn-sm', method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+
+    <% else %>
+      <tr class= 'status'>
+        <td><%= list.category_id %></td>
+        <td><%= link_to list.description, edit_category_list_path(@category, list) %></td>
+        <td><%= Date.today %></td>
+        <td>
+          <center> 
+            <%= form_with(model:[@category, list]) do |f| %>
+              <%= f.text_field :description, type: 'hidden'%>
+              <%= f.check_box :completed, :checked => true, :style => 'visibilit: hidden' %>
+              <%= f.submit "Completed", class: 'btn btn-outline-secondary btn-sm' %>
+            <% end %>  
+          </center>
+          
+        </td>
+        <td><%= link_to 'Remove', category_list_path(@category, list), class: 'btn btn-ouline-danger btn-sm'  ,method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>  
+    <% end %>  
+  </tbody>
+  </table>

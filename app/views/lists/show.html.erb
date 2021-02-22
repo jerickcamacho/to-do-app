@@ -1,0 +1,17 @@
+<p>
+  <strong>Category:</strong>
+  <%= @list.id %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @list.description %>
+</p>
+
+<p>
+  <strong>Completed:</strong>
+  <%= @list.completed %>
+</p>
+
+<%= link_to 'Edit', edit_category_list_path(@category, @list) %> |
+<%= link_to 'Back', category_lists_path(@category) %>
