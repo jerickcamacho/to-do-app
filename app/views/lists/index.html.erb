@@ -29,9 +29,9 @@
       <tr class="table-secondary">
       
       </tr>
-        <td><%= list.category_id %></td>
+        <td><%= list.id %></td>
         <td class="striker"><%= link_to list.description, edit_category_list_path(@category, list) %></td>
-        <td><%= Date.today %></td>
+        <td><%= list.due_date %></td>
         <td>
           <center> 
               <%= form_with(model:[@category, list]) do |f| %>
@@ -42,14 +42,14 @@
           </center>
         </td>
         
-        <td><%= link_to 'Remove', list, class: 'btn btn-ouline-danger btn-sm', method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Remove', category_list_path(@category, list), class: 'btn btn-ouline-danger btn-sm', method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
 
     <% else %>
       <tr class= 'status'>
-        <td><%= list.category_id %></td>
+        <td><%= list.id %></td>
         <td><%= link_to list.description, edit_category_list_path(@category, list) %></td>
-        <td><%= Date.today %></td>
+        <td><%= list.due_date %></td>
         <td>
           <center> 
             <%= form_with(model:[@category, list]) do |f| %>

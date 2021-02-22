@@ -2,5 +2,5 @@
 
 <%= render 'form', list: @list %>
 
-<%= link_to 'Show', @list %> |
+<%= link_to 'Show', category_list_path(@category, @list) %> |
 <%= link_to 'Back', category_lists_path(@category) %>
