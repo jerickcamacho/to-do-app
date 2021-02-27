@@ -1,11 +1,11 @@
-<p id="notice"><%= notice %></p>
-
 <p>
   <strong>Category:</strong>
   <%= @category.name %>
 </p>
 
-<%= link_to 'View Tasks', category_lists_path(@category) %>
+<%= link_to 'View Tasks', user_category_lists_path(@user, @category) %>
 
-<%= link_to 'Edit', edit_category_path(@category) %> |
-<%= link_to 'Back', categories_path %>
+<%= link_to 'Edit', edit_user_category_path(@user, @category, @list) %> |
+<%= link_to 'Back', user_categories_path(@user) %>
+
+

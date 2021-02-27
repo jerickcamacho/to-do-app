@@ -1,11 +1,20 @@
 class ListsController < ApplicationController
-  before_action :set_category
+  
+  before_action :authenticate_user!
+  before_action :set_user
+
+  before_action :set_category 
   #before_action :set_list, only: %i[index show new create edit update destroy]
 
   # GET /lists or /lists.json
   def index
-    @lists = @category.lists
-    # @list = List.new
+    if params[:due_date]
+      @lists = @category.lists.where(due_date: Date.today).where(completed: false)
+      render template: 'lists/index_tasks_today.html.erb'
+    else
+
+      @lists = @category.lists
+    end
   end
 
   # GET /lists/1 or /lists/1.json
@@ -26,10 +35,11 @@ class ListsController < ApplicationController
   # POST /lists or /lists.json
   def create
     @list = @category.lists.build(list_params)
+    @list.user = @user
 
     respond_to do |format|
       if @list.save
-        format.html { redirect_to root_url(category_id: @category.id), notice: "List was successfully created." }
+        format.html { redirect_to user_category_lists_path(@user, @category), notice: "List was successfully created." }
       else
         format.html { render :new, status: :unprocessable_entity }
 
@@ -40,10 +50,11 @@ class ListsController < ApplicationController
   # PATCH/PUT /lists/1 or /lists/1.json
   def update
     @list = @category.lists.find(params[:id])
+    @list.user = @user
 
     respond_to do |format|
       if @list.update(list_params)
-        format.html { redirect_to root_url(category_id: @category.id), notice: "List was successfully updated." }
+        format.html { redirect_to user_category_lists_path(@user, @category), notice: "List was successfully updated." }
       else
         format.html { render :edit, status: :unprocessable_entity }
       end
@@ -53,15 +64,15 @@ class ListsController < ApplicationController
   # DELETE /lists/1 or /lists/1.json
   def destroy
     @list = @category.lists.find(params[:id])
-    
+    @list.user = @user   
+
     if @list.present?
       @list.destroy
     end
 
-
     #@list.destroy
     respond_to do |format|
-      format.html { redirect_to root_url(category_id: @category.id), notice: "List was successfully removed." }
+      format.html { redirect_to user_category_lists_path(@user, @category), notice: "List was successfully removed." }
     end
   end
 
@@ -71,12 +82,16 @@ class ListsController < ApplicationController
       @category = Category.find(params[:category_id])
     end
 
-    # def set_list
-    #   @list = List.find(params[:id])
-    # end
+    #def set_list
+      #@list = List.find(params[:id])
+    #end
+
+    def set_user 
+      @user = current_user
+    end  
 
     # Only allow a list of trusted parameters through.
     def list_params
-      params.require(:list).permit(:description, :completed, :category_id, :due_date)
+      params.require(:list).permit(:description, :completed, :category_id, :due_date, :user_id)
     end
 end
